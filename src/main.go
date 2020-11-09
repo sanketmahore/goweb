@@ -91,6 +91,8 @@ func deleteBooking(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Delete this booking ..." + key)
 	db.Exec("DELETE FROM Bookings WHERE Id=?", key)
+
+	json.NewEncoder(w).Encode("Record is deleted...")
 }
 
 func handleRequests() {
