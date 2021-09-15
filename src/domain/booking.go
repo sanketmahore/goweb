@@ -6,9 +6,25 @@ type Booking struct {
 	Members int    `json:"members"`
 }
 
+type BookingService interface {
+	Create(bookingReq *Booking) error
+	Update(booking *Booking) error
+	Get(id string) (*Booking, error)
+	List() []*Booking
+	Delete(id string) error
+}
+
+type BookingDao interface {
+	CreateBooking(booking *Booking) error
+	ReturnAllBookings() []*Booking
+	ReturnSingleBooking(id string) (*Booking, error)
+	UpdateBooking(booking *Booking) error
+	DeleteBooking(id string) error
+}
+
 type Error string
 
-func (e Error) Error() string{
+func (e Error) Error() string {
 	return string(e)
 }
 
@@ -16,17 +32,3 @@ var (
 	ErrConflict = Error("Duplicate entry")
 	ErrNotFound = Error("not found")
 )
-
-// type BookingService interface {
-// 	Create(bookingReq *Booking) Error
-// 	Update(bookingReq *Booking)
-// 	Get(id string)
-// 	GetAll()
-// }
-
-// type BookingDao interface {
-// 	Create(bookingReq *Booking) Error
-// 	Update(bookingReq *Booking)
-// 	Get(id string)
-// 	GetAll()
-// }

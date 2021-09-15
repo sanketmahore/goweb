@@ -15,11 +15,15 @@ import (
 
 //type bookingService domain.BookingService
 
+var bookingService domain.BookingService
+
 func HandleRequests() {
 
 	log.Println("Starting development server at http://127.0.0.1:10000/")
 
 	log.Println("Quit the server with CONTROL-C.")
+
+	bookingService = NewBookingService(NewBookingDao())
 
 	// creates a new instance of a mux router
 
@@ -46,11 +50,11 @@ func createNewBooking(w http.ResponseWriter, r *http.Request) {
 	reqBody, _ := ioutil.ReadAll(r.Body)
 	var booking *domain.Booking
 	err := json.Unmarshal(reqBody, &booking)
-	if err != nil{
+	if err != nil {
 		http.Error(w, "Can’t unmarshal JSON object into struct", http.StatusBadRequest)
 		return
 	}
-	err = Create(booking)
+	err = bookingService.Create(booking)
 	if err != nil {
 		if strings.Contains(err.Error(), "Duplicate entry") {
 			http.Error(w, "booking already exists", http.StatusConflict)
@@ -65,7 +69,7 @@ func createNewBooking(w http.ResponseWriter, r *http.Request) {
 }
 
 func returnAllBookings(w http.ResponseWriter, r *http.Request) {
-	bookings := List()
+	bookings := bookingService.List()
 	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(bookings)
 }
@@ -73,7 +77,7 @@ func returnAllBookings(w http.ResponseWriter, r *http.Request) {
 func returnSingleBooking(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
-	booking, err := Get(id)
+	booking, err := bookingService.Get(id)
 	if err != nil {
 		if errors.Cause(err) == domain.ErrNotFound {
 			http.Error(w, "booking not found with id", http.StatusNotFound)
@@ -94,7 +98,7 @@ func updatedBooking(w http.ResponseWriter, r *http.Request) {
 	reqBody, _ := ioutil.ReadAll(r.Body)
 	var booking *domain.Booking
 	json.Unmarshal(reqBody, &booking)
-	err := Update(booking)
+	err := bookingService.Update(booking)
 	if err != nil {
 		if errors.Cause(err) == domain.ErrNotFound {
 			http.Error(w, "booking not found with id", http.StatusNotFound)
@@ -110,7 +114,7 @@ func updatedBooking(w http.ResponseWriter, r *http.Request) {
 func deleteBooking(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
-	err := Delete(id)
+	err := bookingService.Delete(id)
 	if err != nil {
 		if errors.Cause(err) == domain.ErrNotFound {
 			http.Error(w, "booking not found with id", http.StatusNotFound)
