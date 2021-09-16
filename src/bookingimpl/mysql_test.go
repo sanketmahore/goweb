@@ -23,7 +23,7 @@ func TestMysqlGet(t *testing.T) {
 		},
 		{
 			"failure",
-			"2",
+			"100",
 			nil,
 			domain.ErrNotFound,
 		},
