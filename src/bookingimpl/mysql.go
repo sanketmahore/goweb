@@ -10,32 +10,31 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-var db *gorm.DB
-
-var err error
-
-type dao struct{}
+type dao struct{
+	session *gorm.DB
+}
 
 func NewBookingDao() domain.BookingDao {
-	return &dao{}
-}
-func init() {
-	db, err = gorm.Open("mysql", "root:root@tcp(127.0.0.1:3306)/booking_api?charset=utf8&parseTime=True")
+	db, err := gorm.Open("mysql", "root:root@tcp(127.0.0.1:3306)/booking_api?charset=utf8&parseTime=True")
+	if err != nil{
+		println("Mysql connection failed..")
+	}
 	db.AutoMigrate(&domain.Booking{})
+	return &dao{session: db}
 }
 
-func (*dao) CreateBooking(booking *domain.Booking) error {
-	err := db.Create(booking).Error
+func (d *dao) CreateBooking(booking *domain.Booking) error {
+	err := d.session.Create(booking).Error
 	return err
 }
 
-func (*dao) ReturnAllBookings() []*domain.Booking {
+func (d *dao) ReturnAllBookings() []*domain.Booking {
 	bookings := make([]*domain.Booking, 0)
-	db.Find(&bookings)
+	d.session.Find(&bookings)
 	return bookings
 }
 
-func (*dao) ReturnSingleBooking(id string) (*domain.Booking, error) {
+func (d *dao) ReturnSingleBooking(id string) (*domain.Booking, error) {
 	ID, err := strconv.Atoi(id)
 	if err != nil {
 		return nil, err
@@ -43,7 +42,7 @@ func (*dao) ReturnSingleBooking(id string) (*domain.Booking, error) {
 	booking := &domain.Booking{
 		Id: ID,
 	}
-	err = db.First(booking).Error
+	err = d.session.First(booking).Error
 	if gorm.IsRecordNotFoundError(err) {
 		err = domain.ErrNotFound
 		return nil, err
@@ -51,9 +50,9 @@ func (*dao) ReturnSingleBooking(id string) (*domain.Booking, error) {
 	return booking, nil
 }
 
-func (*dao) UpdateBooking(booking *domain.Booking) error {
+func (d *dao) UpdateBooking(booking *domain.Booking) error {
 	//db.Exec("UPDATE Bookings SET User =? WHERE Id=?", booking.User, booking.Id)
-	err := db.Model(booking).Update(booking).Error
+	err := d.session.Model(booking).Update(booking).Error
 	if err != nil {
 		fmt.Println("Mysql Error..", err)
 		return err
@@ -61,13 +60,13 @@ func (*dao) UpdateBooking(booking *domain.Booking) error {
 	return nil
 }
 
-func (*dao) DeleteBooking(id string) error {
+func (d *dao) DeleteBooking(id string) error {
 	//db.Exec("DELETE FROM Bookings WHERE Id=?", id)
 	ID, err := strconv.Atoi(id)
 	if err != nil {
 		return err
 	}
-	r := db.Delete(domain.Booking{Id: ID})
+	r := d.session.Delete(domain.Booking{Id: ID})
 	if r.RowsAffected == 0 {
 		return domain.ErrNotFound
 	}
