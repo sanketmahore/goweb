@@ -56,7 +56,7 @@ func createNewBooking(w http.ResponseWriter, r *http.Request) {
 	}
 	err = bookingService.Create(booking)
 	if err != nil {
-		if strings.Contains(err.Error(), "Duplicate entry") {
+		if errors.Cause(err) == domain.ErrConflict {
 			http.Error(w, "booking already exists", http.StatusConflict)
 			return
 		}
