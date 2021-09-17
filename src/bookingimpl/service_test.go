@@ -58,8 +58,9 @@ func TestCreateBooking(t *testing.T) {
 		t.Run(
 			c.name, func(t *testing.T) {
 				dao.On("CreateBooking", mock.Anything).Return(c.err).Once()
-				res := service.Create(c.bookingReq)
-				assert.Equal(t, c.err, res)
+				
+				err := service.Create(c.bookingReq)
+				assert.Equal(t, c.err, err)
 			},
 		)
 	}
