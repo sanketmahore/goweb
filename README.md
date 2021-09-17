@@ -1,9 +1,9 @@
 # goweb
-Build:
+* Build:
 go build
 run exe
 
-Importent packages:
+* Importent packages:
 "github.com/gorilla/mux"
 "net/http"
 "github.com/jinzhu/gorm"
@@ -12,15 +12,15 @@ Importent packages:
 "github.com/stretchr/testify/mock"
 
 
-Unit tests:
+* Unit tests:
 install
     go get github.com/vektra/mockery/v2/.../
 Generate mock interface:
     mockery --case snake --name BookingService --dir domain
 
-Gorm Docs:
+* Gorm Docs:
 https://gorm.io/docs/
 
-Mod commands:
+* Mod commands:
 go mod init learn
 go mod tidy
