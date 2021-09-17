@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/jinzhu/gorm"
+	"github.com/go-sql-driver/mysql"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -25,6 +26,13 @@ func NewBookingDao() domain.BookingDao {
 
 func (d *dao) CreateBooking(booking *domain.Booking) error {
 	err := d.session.Create(booking).Error
+	switch err := err.(type){
+	case *mysql.MySQLError:
+		if err.Number == domain.MysqlDupicate{
+			return domain.ErrConflict
+		}
+		return err	
+	}
 	return err
 }
 

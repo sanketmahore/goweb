@@ -7,7 +7,7 @@ import (
 
 func main() {
 
-	fmt.Println("Curd operations....")
+	fmt.Println("Crud operations....")
 
 	bookingimpl.HandleRequests()
 }

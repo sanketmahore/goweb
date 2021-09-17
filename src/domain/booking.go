@@ -29,6 +29,10 @@ func (e Error) Error() string {
 }
 
 var (
-	ErrConflict = Error("Duplicate entry")
+	ErrConflict = Error("record already exists")
 	ErrNotFound = Error("not found")
+)
+
+const(
+	MysqlDupicate = 1062
 )
