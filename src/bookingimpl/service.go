@@ -5,27 +5,28 @@ import (
 	"strconv"
 )
 
-var bookingDao domain.BookingDao
+//var bookingDao domain.BookingDao
 
-type service struct{}
-
-func NewBookingService(dao domain.BookingDao) domain.BookingService {
-	bookingDao = dao
-	return &service{}
+type service struct{
+	bookingDao domain.BookingDao
 }
 
-func (*service) Create(bookingReq *domain.Booking) error {
-	err := bookingDao.CreateBooking(bookingReq)
+func NewBookingService(dao domain.BookingDao) domain.BookingService {
+	return &service{bookingDao: dao}
+}
+
+func (s *service) Create(bookingReq *domain.Booking) error {
+	err := s.bookingDao.CreateBooking(bookingReq)
 	return err
 }
 
-func (*service) List() []*domain.Booking {
-	bookings := bookingDao.ReturnAllBookings()
+func (s *service) List() []*domain.Booking {
+	bookings := s.bookingDao.ReturnAllBookings()
 	return bookings
 }
 
-func (*service) Get(id string) (*domain.Booking, error) {
-	booking, err := bookingDao.ReturnSingleBooking(id)
+func (s *service) Get(id string) (*domain.Booking, error) {
+	booking, err := s.bookingDao.ReturnSingleBooking(id)
 	if err != nil {
 		return nil, err
 	}
@@ -37,15 +38,19 @@ func (s *service) Update(booking *domain.Booking) error {
 	if err != nil {
 		return err
 	}
-	err = bookingDao.UpdateBooking(booking)
+	err = s.bookingDao.UpdateBooking(booking)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (*service) Delete(id string) error {
-	err := bookingDao.DeleteBooking(id)
+func (s *service) Delete(id string) error {
+	_, err := s.Get(id)
+	if err != nil {
+		return err
+	}
+	err = s.bookingDao.DeleteBooking(id)
 	if err != nil {
 		return err
 	}
