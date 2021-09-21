@@ -5,19 +5,19 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/jinzhu/gorm"
 	"github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-type dao struct{
+type dao struct {
 	session *gorm.DB
 }
 
 func NewBookingDao() domain.BookingDao {
 	db, err := gorm.Open("mysql", "root:root@tcp(127.0.0.1:3306)/booking_api?charset=utf8&parseTime=True")
-	if err != nil{
+	if err != nil {
 		println("Mysql connection failed..")
 	}
 	db.AutoMigrate(&domain.Booking{})
@@ -26,12 +26,12 @@ func NewBookingDao() domain.BookingDao {
 
 func (d *dao) CreateBooking(booking *domain.Booking) error {
 	err := d.session.Create(booking).Error
-	switch err := err.(type){
+	switch err := err.(type) {
 	case *mysql.MySQLError:
-		if err.Number == domain.MysqlDupicate{
+		if err.Number == domain.MysqlDupicate {
 			return domain.ErrConflict
 		}
-		return err	
+		return err
 	}
 	return err
 }
@@ -45,7 +45,7 @@ func (d *dao) ReturnAllBookings() []*domain.Booking {
 func (d *dao) ReturnSingleBooking(id string) (*domain.Booking, error) {
 	ID, err := strconv.Atoi(id)
 	if err != nil {
-		return nil, err
+		return nil, domain.ErrInvalidSyntax
 	}
 	booking := &domain.Booking{
 		Id: ID,
