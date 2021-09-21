@@ -1,22 +1,11 @@
 package domain
 
-import (
-	"net/http"
-)
+import "net/http"
 
 type Booking struct {
 	Id      int    `json:"id"`
 	User    string `json:"user"`
 	Members int    `json:"members"`
-}
-
-type Controller interface {
-    HomePage(w http.ResponseWriter, r *http.Request)
-    CreateNewBooking(w http.ResponseWriter, r *http.Request)
-    GetAllBookings(w http.ResponseWriter, r *http.Request)
-    GetSingleBooking(w http.ResponseWriter, r *http.Request)
-    UpdateBooking(w http.ResponseWriter, r *http.Request)
-    DeleteBooking(w http.ResponseWriter, r *http.Request)
 }
 
 type BookingService interface {
@@ -35,6 +24,15 @@ type BookingDao interface {
 	DeleteBooking(id string) error
 }
 
+type Controller interface {
+	HomePage(w http.ResponseWriter, r *http.Request)
+	CreateNewBooking(w http.ResponseWriter, r *http.Request)
+	GetAllBookings(w http.ResponseWriter, r *http.Request)
+	GetSingleBooking(w http.ResponseWriter, r *http.Request)
+	UpdateBooking(w http.ResponseWriter, r *http.Request)
+	DeleteBooking(w http.ResponseWriter, r *http.Request)
+}
+
 type Error string
 
 func (e Error) Error() string {
@@ -42,10 +40,11 @@ func (e Error) Error() string {
 }
 
 var (
-	ErrConflict = Error("record already exists")
-	ErrNotFound = Error("not found")
+    ErrConflict = Error("record already exists")
+    ErrNotFound = Error("not found")
+	ErrInvalidSyntax = Error("invalid syntax")
 )
 
-const(
+const (
 	MysqlDupicate = 1062
 )
