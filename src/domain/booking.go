@@ -11,12 +11,12 @@ type Booking struct {
 }
 
 type Controller interface {
-    HomePage(w http.ResponseWriter, r *http.Request)
-    CreateNewBooking(w http.ResponseWriter, r *http.Request)
-    GetAllBookings(w http.ResponseWriter, r *http.Request)
-    GetSingleBooking(w http.ResponseWriter, r *http.Request)
-    UpdateBooking(w http.ResponseWriter, r *http.Request)
-    DeleteBooking(w http.ResponseWriter, r *http.Request)
+	HomePage(w http.ResponseWriter, r *http.Request)
+	CreateNewBooking(w http.ResponseWriter, r *http.Request)
+	GetAllBookings(w http.ResponseWriter, r *http.Request)
+	GetSingleBooking(w http.ResponseWriter, r *http.Request)
+	UpdateBooking(w http.ResponseWriter, r *http.Request)
+	DeleteBooking(w http.ResponseWriter, r *http.Request)
 }
 
 type BookingService interface {
@@ -47,6 +47,6 @@ var (
 	ErrInvalidSyntax = Error("invalid syntax")
 )
 
-const(
+const (
 	MysqlDupicate = 1062
 )
