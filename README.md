@@ -1,7 +1,10 @@
 # goweb
-* Build:
+* Build / How to RUN:
+```
 go build
+
 run exe
+```
 
 * Importent packages:
 "github.com/gorilla/mux"
