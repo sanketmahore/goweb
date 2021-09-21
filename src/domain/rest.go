@@ -13,8 +13,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-//type bookingService domain.BookingService
-
 type bookingController struct {
 	service domain.BookingService
 }
@@ -62,7 +60,7 @@ func (c *bookingController) CreateNewBooking(w http.ResponseWriter, r *http.Requ
 	}
 	err = c.service.Create(booking)
 	if err != nil {
-		if strings.Contains(err.Error(), "Duplicate entry") {
+		if errors.Cause(err) == domain.ErrConflict {
 			http.Error(w, "booking already exists", http.StatusConflict)
 			return
 		}
@@ -110,6 +108,10 @@ func (c *bookingController) UpdateBooking(w http.ResponseWriter, r *http.Request
 			http.Error(w, "booking not found with id", http.StatusNotFound)
 			return
 		}
+		if strings.Contains(err.Error(), "invalid syntax") {
+			http.Error(w, "incorrect id", http.StatusBadRequest)
+			return
+		}
 		http.Error(w, "unable to update booking", http.StatusInternalServerError)
 		return
 	}
@@ -124,6 +126,10 @@ func (c *bookingController) DeleteBooking(w http.ResponseWriter, r *http.Request
 	if err != nil {
 		if errors.Cause(err) == domain.ErrNotFound {
 			http.Error(w, "booking not found with id", http.StatusNotFound)
+			return
+		}
+		if strings.Contains(err.Error(), "invalid syntax") {
+			http.Error(w, "incorrect id", http.StatusBadRequest)
 			return
 		}
 		http.Error(w, "unable to delete booking", http.StatusInternalServerError)
