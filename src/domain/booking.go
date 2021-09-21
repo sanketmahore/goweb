@@ -42,8 +42,8 @@ func (e Error) Error() string {
 }
 
 var (
-	ErrConflict      = Error("record already exists")
-	ErrNotFound      = Error("not found")
+	ErrConflict = Error("record already exists")
+	ErrNotFound = Error("not found")
 	ErrInvalidSyntax = Error("invalid syntax")
 )
 
