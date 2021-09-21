@@ -87,7 +87,7 @@ func (c *bookingController) GetSingleBooking(w http.ResponseWriter, r *http.Requ
 			http.Error(w, "booking not found with id", http.StatusNotFound)
 			return
 		}
-		if strings.Contains(err.Error(), "invalid syntax") {
+		if errors.Cause(err) == domain.ErrInvalidSyntax {
 			http.Error(w, "incorrect id", http.StatusBadRequest)
 			return
 		}
