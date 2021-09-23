@@ -1,6 +1,7 @@
 package bookingimpl
 
 import (
+	"crud/src/authentication"
 	"crud/src/domain"
 	"fmt"
 	"strconv"
@@ -79,4 +80,25 @@ func (d *dao) DeleteBooking(id string) error {
 		return domain.ErrNotFound
 	}
 	return nil
+}
+
+func (d *dao) AuthenticateUser(creds *authentication.Credentials) (bool, error) {
+	fmt.Println("In mysql : AuthenticateUser start")
+	credentials := &domain.Credentials{
+		Username: creds.Username,
+		Password: creds.Password,
+	}
+
+	//err := d.session.First(credentials).Error
+	err := d.session.First(credentials, "username = ? and password = ?", creds.Username, creds.Password).Error
+	if err != nil {
+		if gorm.IsRecordNotFoundError(err) {
+			err = domain.ErrNotFound
+			return false, err
+		}
+		return false, err
+	}
+
+	fmt.Println("In mysql : AuthenticateUser end")
+	return true, nil
 }
