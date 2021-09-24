@@ -1,4 +1,4 @@
-package bookingimpl
+package dao
 
 import (
 	"crud/src/authentication"
@@ -22,6 +22,7 @@ func NewBookingDao() domain.BookingDao {
 		println("Mysql connection failed..")
 	}
 	db.AutoMigrate(&domain.Booking{})
+	db.AutoMigrate(&domain.Credentials{})
 	return &dao{session: db}
 }
 

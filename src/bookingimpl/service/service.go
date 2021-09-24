@@ -1,4 +1,4 @@
-package bookingimpl
+package service
 
 import (
 	"context"
