@@ -1,6 +1,8 @@
-package bookingimpl
+package rest
 
 import (
+	"crud/src/bookingimpl/dao"
+	"crud/src/bookingimpl/service"
 	"crud/src/domain"
 	"encoding/json"
 	"fmt"
@@ -27,7 +29,7 @@ func HandleRequests() {
 
 	log.Println("Quit the server with CONTROL-C.")
 
-	bookingController := NewBookingController(NewBookingService(NewBookingDao()))
+	bookingController := NewBookingController(service.NewBookingService(dao.NewBookingDao()))
 
 	// creates a new instance of a mux router
 
