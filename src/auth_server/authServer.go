@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"crud/src/authentication"
-	"crud/src/bookingimpl"
+	"crud/src/bookingimpl/dao"
 	"fmt"
 	"log"
 	"net"
@@ -17,9 +17,9 @@ type server struct {
 
 func (*server) Authenticate(ctx context.Context, input *authentication.Credentials) (*authentication.Result, error) {
 	fmt.Println("In grpcServer : Authenticate start")
-	d := bookingimpl.NewBookingDao()
+	d := dao.NewBookingDao()
 	res, err := d.AuthenticateUser(input)
-	fmt.Println("In grpcServer : Authenticate stop")
+	fmt.Println("In grpcServer : Authenticate end")
 	return &authentication.Result{
 		Outcome: res,
 	}, err

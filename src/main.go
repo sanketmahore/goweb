@@ -1,13 +1,13 @@
 package main
 
 import (
+	"crud/src/bookingimpl/rest"
 	"fmt"
-	"crud/src/bookingimpl"
 )
 
 func main() {
 
 	fmt.Println("Crud operations....")
 
-	bookingimpl.HandleRequests()
+	rest.HandleRequests()
 }
