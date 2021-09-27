@@ -1,6 +1,8 @@
-package bookingimpl
+package rest
 
 import (
+	"crud/src/bookingimpl/dao"
+	"crud/src/bookingimpl/service"
 	"crud/src/domain"
 	"encoding/json"
 	"fmt"
@@ -27,13 +29,14 @@ func HandleRequests() {
 
 	log.Println("Quit the server with CONTROL-C.")
 
-	bookingController := NewBookingController(NewBookingService(NewBookingDao()))
+	bookingController := NewBookingController(service.NewBookingService(dao.NewBookingDao()))
 
 	// creates a new instance of a mux router
 
 	myRouter := mux.NewRouter().StrictSlash(true)
 
 	myRouter.HandleFunc("/", bookingController.HomePage)
+	myRouter.HandleFunc("/login", bookingController.Login).Methods("POST")
 	myRouter.HandleFunc("/new-booking", bookingController.CreateNewBooking).Methods("POST")
 	myRouter.HandleFunc("/all-bookings", bookingController.GetAllBookings).Methods("GET")
 	myRouter.HandleFunc("/booking/{id}", bookingController.GetSingleBooking).Methods("GET")
@@ -48,6 +51,29 @@ func (c *bookingController) HomePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Welcome to HomePage!!!!!!!!!!!!")
 
 	fmt.Println("Endpoint Hit: HomePage")
+}
+
+func (c *bookingController) Login(w http.ResponseWriter, r *http.Request) {
+	reqBody, _ := ioutil.ReadAll(r.Body)
+	var creds *domain.Credentials
+	err := json.Unmarshal(reqBody, &creds)
+	if err != nil {
+		http.Error(w, "Can’t unmarshal JSON object into struct", http.StatusBadRequest)
+		return
+	}
+	auth_res, err := c.service.Login(creds)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusForbidden)
+		return
+	}
+	w.Header().Add("Content-Type", "application/json")
+	if !auth_res {
+		w.WriteHeader(http.StatusForbidden)
+		json.NewEncoder(w).Encode(auth_res)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(auth_res)
 }
 
 func (c *bookingController) CreateNewBooking(w http.ResponseWriter, r *http.Request) {
