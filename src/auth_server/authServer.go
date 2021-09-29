@@ -1,4 +1,4 @@
-package main
+package grpcserver
 
 import (
 	"context"
@@ -25,7 +25,7 @@ func (*server) Authenticate(ctx context.Context, input *authentication.Credentia
 	}, err
 }
 
-func main() {
+func RunGRPC() {
 	fmt.Println("Authentication server")
 	lis, err := net.Listen("tcp", "0.0.0.0:50051")
 	if err != nil {
