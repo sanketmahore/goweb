@@ -1,7 +1,7 @@
 package service
 
 import (
-	"goweb_microservices/admin_microservice/src/domain"
+	"github.com/sanketmahore/goweb_microservices/admin_microservice/src/domain"
 	"strconv"
 
 )

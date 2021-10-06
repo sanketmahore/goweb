@@ -1,12 +1,12 @@
 package rest
 
 import (
-	"goweb_microservices/login_microservice/domain"
+	"github.com/sanketmahore/goweb_microservices/login_microservice/domain"
 	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"goweb_microservices/login_microservice/service"
+	"github.com/sanketmahore/goweb_microservices/login_microservice/service"
 
 	"github.com/gorilla/mux"
 )

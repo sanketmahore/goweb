@@ -1,7 +1,7 @@
 package main
 
 import (
-	"goweb_microservices/login_microservice/rest"
+	"github.com/sanketmahore/goweb_microservices/login_microservice/rest"
 	"fmt"
 )
 

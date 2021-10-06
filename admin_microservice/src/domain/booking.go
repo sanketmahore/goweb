@@ -1,7 +1,7 @@
 package domain
 
 import (
-	"goweb_microservices/login_microservice/authentication"
+	"github.com/sanketmahore/goweb_microservices/login_microservice/authentication"
 	"net/http"
 )
 

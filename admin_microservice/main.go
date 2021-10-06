@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"goweb_microservices/admin_microservice/src/rest"
+	"github.com/sanketmahore/goweb_microservices/admin_microservice/src/rest"
 )
 
 func main() {

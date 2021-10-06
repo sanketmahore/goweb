@@ -1,8 +1,8 @@
 package dao
 
 import (
-	"goweb_microservices/admin_microservice/src/domain"
-	"goweb_microservices/login_microservice/authentication"
+	"github.com/sanketmahore/goweb_microservices/admin_microservice/src/domain"
+	"github.com/sanketmahore/goweb_microservices/login_microservice/authentication"
 	"fmt"
 	"strconv"
 	"time"

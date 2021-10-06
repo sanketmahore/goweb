@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"goweb_microservices/admin_microservice/src/dao"
+	"github.com/sanketmahore/goweb_microservices/admin_microservice/src/dao"
 	"fmt"
-	"goweb_microservices/login_microservice/authentication"
+	"github.com/sanketmahore/goweb_microservices/login_microservice/authentication"
 	"log"
 	"net"
 

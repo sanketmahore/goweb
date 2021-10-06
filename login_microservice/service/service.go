@@ -1,9 +1,9 @@
 package service
 
 import (
-	"goweb_microservices/login_microservice/authentication"
+	"github.com/sanketmahore/goweb_microservices/login_microservice/authentication"
 	"context"
-	"goweb_microservices/login_microservice/domain"
+	"github.com/sanketmahore/goweb_microservices/login_microservice/domain"
 	"fmt"
 	"strings"
 

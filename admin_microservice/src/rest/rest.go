@@ -1,9 +1,9 @@
 package rest
 
 import (
-	"goweb_microservices/admin_microservice/src/dao"
-	"goweb_microservices/admin_microservice/src/service"
-	"goweb_microservices/admin_microservice/src/domain"
+	"github.com/sanketmahore/goweb_microservices/admin_microservice/src/dao"
+	"github.com/sanketmahore/goweb_microservices/admin_microservice/src/service"
+	"github.com/sanketmahore/goweb_microservices/admin_microservice/src/domain"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
