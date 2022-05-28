@@ -6,7 +6,7 @@
 2. run exe
 ```
 
-* Importent packages:
+* Important packages:
 ```
 "github.com/gorilla/mux"
 "net/http"
