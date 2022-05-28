@@ -1,4 +1,4 @@
-package bookingimpl
+package rest
 
 import (
 	"crud/src/domain"

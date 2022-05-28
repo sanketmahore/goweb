@@ -1,10 +1,11 @@
-package bookingimpl
+package dao
 
 import (
 	"crud/src/domain"
 	"testing"
+
 	"github.com/pkg/errors"
-	"github.com/stretchr/testify/assert"	
+	"github.com/stretchr/testify/assert"
 )
 
 func TestMysqlSave(t *testing.T) {

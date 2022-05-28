@@ -1,18 +1,50 @@
-package bookingimpl
+package service
 
 import (
+	"context"
+	"crud/src/authentication"
 	"crud/src/domain"
+	"fmt"
 	"strconv"
+	"strings"
+
+	"google.golang.org/grpc"
 )
 
 //var bookingDao domain.BookingDao
 
-type service struct{
+type service struct {
 	bookingDao domain.BookingDao
 }
 
 func NewBookingService(dao domain.BookingDao) domain.BookingService {
 	return &service{bookingDao: dao}
+}
+
+func (s *service) Login(creds *domain.Credentials) (bool, error) {
+	conn, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
+	if err != nil {
+		return false, fmt.Errorf("failed to connect %v", err)
+	}
+
+	defer conn.Close()
+
+	c := authentication.NewLoginServiceClient(conn)
+	req := &authentication.Credentials{
+		Username: creds.Username,
+		Password: creds.Password,
+	}
+
+	res, err := c.Authenticate(context.Background(), req)
+
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			return false, nil
+		}
+		return false, fmt.Errorf("error in RPC %v", err)
+	}
+
+	return res.Outcome, nil
 }
 
 func (s *service) Create(bookingReq *domain.Booking) error {

@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"crud/src/authentication"
 	"net/http"
 )
 
@@ -10,6 +11,11 @@ type Booking struct {
 	Members int    `json:"members"`
 }
 
+type Credentials struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 type Controller interface {
 	HomePage(w http.ResponseWriter, r *http.Request)
 	CreateNewBooking(w http.ResponseWriter, r *http.Request)
@@ -17,6 +23,7 @@ type Controller interface {
 	GetSingleBooking(w http.ResponseWriter, r *http.Request)
 	UpdateBooking(w http.ResponseWriter, r *http.Request)
 	DeleteBooking(w http.ResponseWriter, r *http.Request)
+	Login(w http.ResponseWriter, r *http.Request)
 }
 
 type BookingService interface {
@@ -25,6 +32,7 @@ type BookingService interface {
 	Get(id string) (*Booking, error)
 	List() []*Booking
 	Delete(id string) error
+	Login(creds *Credentials) (bool, error)
 }
 
 type BookingDao interface {
@@ -33,6 +41,7 @@ type BookingDao interface {
 	ReturnSingleBooking(id string) (*Booking, error)
 	UpdateBooking(booking *Booking) error
 	DeleteBooking(id string) error
+	AuthenticateUser(creds *authentication.Credentials) (bool, error)
 }
 
 type Error string
